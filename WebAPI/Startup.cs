@@ -8,8 +8,7 @@ using Core.Utilities.Security.Jwt;
 using DataAccess.Abstarct;
 using DataAccess.Conctere.EntityFramewok;
 using Identity.CustomValidations;
-using Identity.Models.Authentication;
-using Identity.Models.Context;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +25,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Models.Authentication;
+using WebAPI.Models.Context;
 
 namespace WebAPI
 {

@@ -1,7 +1,5 @@
 ﻿using Business.Abstract;
 using Entities.DTOs;
-using Identity.Models.Authentication;
-using Identity.Models.ViewModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +10,8 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
+using WebAPI.Models.Authentication;
+using WebAPI.Models.ViewModel;
 using RouteAttribute = Microsoft.AspNetCore.Components.RouteAttribute;
 
 namespace WebAPI.Controllers
