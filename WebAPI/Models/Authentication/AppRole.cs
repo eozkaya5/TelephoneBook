@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models.Authentication
 {
-    public class AppRole:IdentityRole<User>
+    public class AppRole:IdentityRole<int>
     {
     }
 }
