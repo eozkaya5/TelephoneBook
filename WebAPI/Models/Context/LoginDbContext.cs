@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Identity.Models.Context
+namespace WebAPI.Models.Context
 {
     public class LoginDbContext:IdentityDbContext<AppUser, AppRole, int>
     {

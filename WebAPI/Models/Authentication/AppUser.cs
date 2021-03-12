@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Identity.Models.Authentication
+namespace WebAPI.Models.Authentication
 {
     public class AppUser:IdentityUser<int>
     { 
