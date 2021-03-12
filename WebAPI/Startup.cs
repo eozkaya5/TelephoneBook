@@ -1,11 +1,10 @@
 using Business.Abstract;
-using Business.Concrete;
+
 using Business.ConCrete;
 using Core.Extensions;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
-using DataAccess.Abstarct;
-using DataAccess.Conctere.EntityFramewok;
+
 using Identity.CustomValidations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -42,13 +41,9 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LoginDbContext>(_ => _.UseSqlServer(Configuration["ConnectionString"]));
-
+           services.AddDbContext<BookDbContext>(_ => _.UseSqlServer(Configuration["ConnectionString"]));
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<IBookService, BookManager>();
-            services.AddSingleton<IBookDal, EfBookDal>();
-
-
-
+            
             services.AddIdentity<AppUser, AppRole>(_ =>
             {
                 _.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
