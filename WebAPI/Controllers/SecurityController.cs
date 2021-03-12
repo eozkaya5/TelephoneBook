@@ -12,11 +12,11 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : Controller
+    public class SecurityController : Controller
     {
         private ISecurityService _securityService;
 
-        public AuthController(ISecurityService securityService)
+        public SecurityController(ISecurityService securityService)
         {
             _securityService = securityService;
         }
