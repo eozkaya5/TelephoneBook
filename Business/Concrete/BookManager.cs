@@ -31,9 +31,19 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Deleted);
         }
 
+        public IDataResult<List<Book>> Get()
+        {
+            throw new NotImplementedException();
+        }
+
         public IDataResult<List<Book>> GetAll(int id)
         {
            return new SuccessDataResult<List<Book>> (_bookDal.GetAll(x=>x.Id==id),Messages.Listed);
+        }
+
+        public IDataResult<List<Book>> GetById(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public IResult Update(Book book)

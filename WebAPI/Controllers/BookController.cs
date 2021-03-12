@@ -7,16 +7,14 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
-{
-    public class BookController : Controller
-    {
+{  
         [Route("api/[controller]")]
         [ApiController]//ATTRIBUTE
-        public class ProductsController : ControllerBase
+        public class BookController : Controller
         {
          
             IBookService _bookService;
-            public ProductsController(IBookService bookService)
+            public BookController(IBookService bookService)
             {
                 _bookService = bookService;
             }

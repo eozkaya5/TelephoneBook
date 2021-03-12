@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Core.Entities;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models.ViewModel
 {
-    public class UserModel
+    public class UserModel:IEntity
     {
         public int Id { get; set; }      
         public string Name { get; set; }
