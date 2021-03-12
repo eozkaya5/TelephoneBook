@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models.ViewModel
 {
-    public class ResetPasswordModel:IEntity
+    public class ResetPasswordModel
     {       
         public string Email { get; set; }
     }

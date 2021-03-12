@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models.ViewModel
 {
-    public class UserModel:IEntity
+    public class UserModel
     {
         public int Id { get; set; }      
         public string Name { get; set; }

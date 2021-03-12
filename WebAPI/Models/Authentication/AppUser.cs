@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models.Authentication
 {
-    public class AppUser:IdentityUser<int>,IEntity
-    { 
+    public class AppUser:IdentityUser<int>
+    {
+ 
     }
 }
