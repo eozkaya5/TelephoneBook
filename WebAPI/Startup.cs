@@ -4,16 +4,15 @@ using Business.ConCrete;
 using Core.Extensions;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
-using Core.Utilities.Security.Jwt;
 using DataAccess.Abstarct;
 using DataAccess.Conctere.EntityFramewok;
 using Identity.CustomValidations;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,42 +42,33 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LoginDbContext>(_ => _.UseSqlServer(Configuration["ConnectionString"]));
+            services.AddSingleton<IConfiguration>(Configuration);
+
             services.AddIdentity<AppUser, AppRole>(_ =>
             {
+                _.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
                 _.Password.RequireNonAlphanumeric = false;
                 _.User.AllowedUserNameCharacters = "abcçdefghiýjklmnoöpqrsþtuüvwxyzABCÇDEFGHIÝJKLMNOÖPQRSÞTUÜVWXYZ0123456789-._@+"; //Kullanýcý adýnda geçerli olan karakterleri belirtiyoruz.
-            }).AddPasswordValidator<CustomPasswordValidation>()
-            .AddUserValidator<CustomUserValidation>()
-            .AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<LoginDbContext>();
+            }).AddDefaultTokenProviders()
+                 .AddPasswordValidator<CustomPasswordValidation>()
+               .AddUserValidator<CustomUserValidation>()
+               .AddErrorDescriber<CustomIdentityErrorDescriber>().AddEntityFrameworkStores<LoginDbContext>()
+             .AddDefaultTokenProviders();
+
             services.ConfigureApplicationCookie(_ =>
             {
                 _.LoginPath = new PathString("/Security/Index");
                 _.Cookie = new CookieBuilder
                 {
-                    Name = "AspNetCoreIdentityExampleCookie", //Oluþturulacak Cookie'yi isimlendiriyoruz.
-                    HttpOnly = false, //Kötü niyetli insanlarýn client-side tarafýndan Cookie'ye eriþmesini engelliyoruz.                        
-                    SameSite = SameSiteMode.Lax, //Top level navigasyonlara sebep olmayan requestlere Cookie'nin gönderilmemesini belirtiyoruz.
-                    SecurePolicy = CookieSecurePolicy.Always //HTTPS üzerinden eriþilebilir yapýyoruz.
+                    Name = "AspNetCoreIdentityExampleCookie",
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.Always
                 };
-                _.SlidingExpiration = true; //Expiration süresinin yarýsý kadar süre zarfýnda istekte bulunulursa eðer geri kalan yarýsýný tekrar sýfýrlayarak ilk ayarlanan süreyi tazeleyecektir.
-                _.ExpireTimeSpan = TimeSpan.FromMinutes(10); //CookieBuilder nesnesinde tanýmlanan Expiration deðerinin varsayýlan deðerlerle ezilme ihtimaline karþýn tekrardan Cookie vadesi burada da belirtiliyor.
+                _.SlidingExpiration = true;
+                _.ExpireTimeSpan = TimeSpan.FromMinutes(10);
             });
-            //var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //   .AddJwtBearer(options =>
-            //   {
-            //       options.TokenValidationParameters = new TokenValidationParameters
-            //       {
-            //           ValidateIssuer = true,
-            //           ValidateAudience = true,
-            //           ValidateLifetime = true,
-            //           ValidIssuer = tokenOptions.Issuer,
-            //           ValidAudience = tokenOptions.Audience,
-            //           ValidateIssuerSigningKey = true,
-            //           IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
-            //       };
 
-            //   });
             services.AddControllersWithViews();
             services.AddSwaggerDocument();
         }
