@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]//ATTRIBUTE
+   
     public class BookController : Controller
     {
 
@@ -21,21 +20,18 @@ namespace WebAPI.Controllers
 
         [HttpGet("get")]
         public IActionResult Get()
-        {
-            // Dependency chain
-            //Eğer istek başarılı ise veriyi listelettir değilse hata mesajı göster
+        {           
             var result = _bookService.Get();
             if (result.Success)
             {
-                return Ok(result);//Data
+                return Ok(result);
             }
-            return BadRequest(result);// Messages
+            return BadRequest(result);
         }
 
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
-            //Eğer istek başarılı ise veriyi listelettir değilse hata mesajı göster
             var result = _bookService.GetById(id);
             if (result.Success)
             {
@@ -43,18 +39,19 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
+        //[HttpGet]
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+       
+        //public IActionResult GetAll(int id)
+        //{
+        //    var result = _bookService.GetAll(id);
+          
+        //    return View(result);
 
-        [HttpPost("add")]
-        public IActionResult Add(Book book)
-        {
-            //Eğer istek başarılı ise veriyi kaydet değilse hata mesajı göster
-
-            var result = _bookService.Add(book);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+        //}
+    
     }
 }

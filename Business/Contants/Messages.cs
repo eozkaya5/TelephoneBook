@@ -21,5 +21,7 @@ namespace Business.Contants
         public static string AccessTokenCreated = "Token eklendi.";
 
         public static string AuthorizationDenied = "";
+
+        public static string UserLogin { get; internal set; }
     }
 }

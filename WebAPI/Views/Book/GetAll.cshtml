@@ -43,31 +43,31 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            @*<tbody>
+                            <tbody>
                                 @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Id)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SurName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TelephoneNumber)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Sil</a> |
-                                   
-                                </td>
-                            </tr>
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SurName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TelephoneNumber)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.Id">Sil</a> |
 
-                        }
-                            </tbody>*@
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
 
                         </table>
                     </div>
@@ -79,5 +79,5 @@
 </div><!--End Row-->
 <!--</form>-->
 <!--start overlay-->
-<!--<div class="overlay toggle-menu"></div>-->
+<div class="overlay toggle-menu"></div>
 <!--end overlay-->

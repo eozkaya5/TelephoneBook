@@ -10,9 +10,9 @@ namespace Business.Abstract
 {
     public interface ISecurityService
     {
-        IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password);
-        IDataResult<User> Login(UserForLoginDto userForLoginDto);
+        IDataResult<d> Register(UserForRegisterDto userForRegisterDto, string password);
+        IDataResult<d> Login(UserForLoginDto userForLoginDto);
         IResult UserExists(string email);
-        IDataResult<AccessToken> CreateAccessToken(User user);
+        IDataResult<AccessToken> CreateAccessToken(d user);
     }
 }

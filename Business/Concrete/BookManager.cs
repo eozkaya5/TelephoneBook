@@ -51,5 +51,6 @@ namespace Business.Concrete
             _bookDal.Update(book);
             return new SuccessResult(Messages.Updated);
         }
+      
     }
 }

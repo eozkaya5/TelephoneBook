@@ -42,13 +42,18 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LoginDbContext>(_ => _.UseSqlServer(Configuration["ConnectionString"]));
+
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<IBookService, BookManager>();
+            services.AddSingleton<IBookDal, EfBookDal>();
+
+
 
             services.AddIdentity<AppUser, AppRole>(_ =>
             {
                 _.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
                 _.Password.RequireNonAlphanumeric = false;
-                _.User.AllowedUserNameCharacters = "abcçdefghiýjklmnoöpqrsþtuüvwxyzABCÇDEFGHIÝJKLMNOÖPQRSÞTUÜVWXYZ0123456789-._@+"; //Kullanýcý adýnda geçerli olan karakterleri belirtiyoruz.
+                _.User.AllowedUserNameCharacters = "abcçdefghiýjklmnoöpqrsþtuüvwxyzABCÇDEFGHIÝJKLMNOÖPQRSÞTUÜVWXYZ0123456789-._@+"; 
             }).AddDefaultTokenProviders()
                  .AddPasswordValidator<CustomPasswordValidation>()
                .AddUserValidator<CustomUserValidation>()

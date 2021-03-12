@@ -5,24 +5,24 @@ using System.Collections.Generic;
 
 namespace Business.ConCrete
 {
-    public class UserManager : IUserService
+    public class ss : IUserService
     {
         IUserDal _userDal;
 
-        public UserManager(IUserDal userDal)
+        public ss(IUserDal userDal)
         {
             _userDal = userDal;
         }      
-        public void Add(User user)
+        public void Add(d user)
         {
             _userDal.Add(user);
         }
 
-        public User GetByMail(string email)
+        public d GetByMail(string email)
         {
             return _userDal.Get(u => u.Email == email);
         }
-        public List<OperationClaim> GetClaims(User user)
+        public List<OperationClaim> GetClaims(d user)
         {
             return _userDal.GetClaims(user);
         }

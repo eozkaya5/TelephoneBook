@@ -13,6 +13,8 @@ namespace Business.Abstract
         IResult Delete(Book book);
         IDataResult<List<Book>> GetById(int id);
         IDataResult<List<Book>> Get();
+        IDataResult<List<Book>> GetAll(int id);
+
 
     }
 }
