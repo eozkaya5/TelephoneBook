@@ -22,5 +22,9 @@ namespace Business.ConCrete
         {
             return _userDal.Get(u => u.Email == email);
         }
+        public List<OperationClaim> GetClaims(User user)
+        {
+            return _userDal.GetClaims(user);
+        }
     }
 }
