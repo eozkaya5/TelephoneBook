@@ -2,6 +2,7 @@
 using Core.DataAccess.EntityFramework;
 using DataAccess.Abstarct;
 using Entities;
+using Entities.Context;
 using System;
 using System.Collections.Generic;
 using System.Text;
