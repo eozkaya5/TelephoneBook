@@ -1,61 +1,150 @@
 ﻿using Business.Abstract;
 using Entities.DTOs;
+using Identity.Models.Authentication;
+using Identity.Models.ViewModel;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using System.Web;
 using RouteAttribute = Microsoft.AspNetCore.Components.RouteAttribute;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    
     public class SecurityController : Controller
     {
-        private ISecurityService _securityService;
 
-        public SecurityController(ISecurityService securityService)
+        readonly UserManager<AppUser> _userManager;
+        readonly SignInManager<AppUser> _signInManager;
+        public SecurityController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            _securityService = securityService;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+        public IActionResult Index()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(UserModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser appUser = new AppUser
+                {
+                    UserName = user.UserName,
+                    Email = user.Email
+                };
+                IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
+                if (result.Succeeded)
+                    return RedirectToAction("Index", "Security");
+                else
+                    result.Errors.ToList().ForEach(x => ModelState.AddModelError(x.Code, x.Description));
+
+            }
+            return View("Index");
         }
 
-        [HttpPost("login")]
-        public ActionResult Login(UserForLoginDto userForLoginDto)
+        [HttpGet]
+        public IActionResult Login()
         {
-            var userToLogin = _securityService.Login(userForLoginDto);
-            if (!userToLogin.Success)
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel login)
+        {
+            if (ModelState.IsValid)
             {
-                return BadRequest(userToLogin.Message);
+                AppUser appUser = await _userManager.FindByEmailAsync(login.Email);
+                if (appUser != null)
+                {
+                    await _signInManager.SignOutAsync();
+                    Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(appUser, login.Password, login.Persistent, login.Lock);
+                    if (result.Succeeded)
+                        return RedirectToAction("Index", "Home");
+                    ModelState.AddModelError("NotUser2", "E-Posta veya şifre hatalı.");
+                }
+                else
+                {
+                    ModelState.AddModelError("NotUser", "Böyle bir kullanıcı bulunmamaktadır.");
+                }
             }
-
-            var result = _securityService.CreateAccessToken(userToLogin.Data);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-
-            return BadRequest(result.Message);
+            return View("Index");
         }
 
-        [HttpPost("register")]
-        public ActionResult Register(UserForRegisterDto userForRegisterDto)
+
+        public IActionResult PasswordReset()
         {
-            var userExists = _securityService.UserExists(userForRegisterDto.Email);
-            if (!userExists.Success)
-            {
-                return BadRequest(userExists.Message);
-            }
-
-            var registerResult = _securityService.Register(userForRegisterDto, userForRegisterDto.Password);
-            var result = _securityService.CreateAccessToken(registerResult.Data);
-            if (result.Success)
-            {
-                return Ok(result.Data);
-            }
-
-            return BadRequest(result.Message);
+            return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel reset)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(reset.Email);
+            if (user != null)
+            {
+                string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                MailMessage mail = new MailMessage();
+                mail.IsBodyHtml = true;
+                mail.To.Add(user.Email);
+                mail.From = new MailAddress("******@gmail.com", "Şifre Güncelleme", System.Text.Encoding.UTF8);
+                mail.Subject = "Şifre Güncelleme Talebi";
+                mail.Body = $"<a target=\"_blank\" href=\"https://localhost:5001{Url.Action("UpdatePassword", "Security", new { Id = user.Id, token = HttpUtility.UrlEncode(token) })}\">Yeni şifre talebi için tıklayınız</a>";
+                mail.IsBodyHtml = true;
+                SmtpClient smp = new SmtpClient();
+                smp.Credentials = new NetworkCredential("ozkayaelif562@gmail.com", "ozkayaelif562");
+                smp.Port = 587;
+                smp.Host = "smtp.gmail.com";
+                smp.EnableSsl = true;
+                smp.Send(mail);
+
+                ViewBag.State = true;
+            }
+            else
+                ViewBag.State = false;
+
+            return View();
+        }
+
+        [HttpGet("[action]/{Id}/{token}")]
+        public IActionResult UpdatePassword(string Id, string token)
+        {
+            return View();
+        }
+        [HttpPost("[action]/{Id}/{token}")]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordModel update, string Id, string token)
+        {
+            AppUser user = await _userManager.FindByIdAsync(Id);
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, HttpUtility.UrlDecode(token), update.Password);
+            if (result.Succeeded)
+            {
+                ViewBag.State = true;
+                await _userManager.UpdateSecurityStampAsync(user);
+                return RedirectToAction("Index", "Security");
+            }
+            else
+                ViewBag.State = false;
+            return View();
+        }
+
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Security");
+        }
+
     }
 }
