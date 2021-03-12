@@ -3,6 +3,7 @@ using Entities.DTOs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,17 @@ using RouteAttribute = Microsoft.AspNetCore.Components.RouteAttribute;
 
 namespace WebAPI.Controllers
 {
-    
+
     public class SecurityController : Controller
     {
-
+        private readonly IConfiguration _configuration;
         readonly UserManager<AppUser> _userManager;
         readonly SignInManager<AppUser> _signInManager;
-        public SecurityController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public SecurityController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
         public IActionResult Index()
         {
@@ -43,16 +45,19 @@ namespace WebAPI.Controllers
             {
                 AppUser appUser = new AppUser
                 {
+
                     UserName = user.UserName,
-                    Email = user.Email
+                    Email = user.Email,
+
                 };
-                IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
-                if (result.Succeeded)
+                IdentityResult pasword = await _userManager.CreateAsync(appUser, user.Password);
+                if (pasword.Succeeded)
                     return RedirectToAction("Index", "Security");
                 else
-                    result.Errors.ToList().ForEach(x => ModelState.AddModelError(x.Code, x.Description));
+                    pasword.Errors.ToList().ForEach(x => ModelState.AddModelError(x.Code, x.Description));
 
             }
+
             return View("Index");
         }
 
@@ -84,29 +89,36 @@ namespace WebAPI.Controllers
         }
 
 
-        public IActionResult PasswordReset()
+        public IActionResult ResetPassword()
         {
             return View();
         }
         [HttpPost]
+
         public async Task<IActionResult> ResetPassword(ResetPasswordModel reset)
         {
+
             AppUser user = await _userManager.FindByEmailAsync(reset.Email);
             if (user != null)
             {
+                var email = _configuration["MyConfig:Email"];
+                var password = _configuration["MyConfig:Password"];
+                var host = _configuration["MyConfig:Host"];
+
                 string token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                 MailMessage mail = new MailMessage();
                 mail.IsBodyHtml = true;
                 mail.To.Add(user.Email);
-                mail.From = new MailAddress("******@gmail.com", "Şifre Güncelleme", System.Text.Encoding.UTF8);
+                mail.From = new MailAddress(email, "Şifre Güncelleme", System.Text.Encoding.UTF8);
                 mail.Subject = "Şifre Güncelleme Talebi";
-                mail.Body = $"<a target=\"_blank\" href=\"https://localhost:5001{Url.Action("UpdatePassword", "Security", new { Id = user.Id, token = HttpUtility.UrlEncode(token) })}\">Yeni şifre talebi için tıklayınız</a>";
+                mail.Body = $"<a target=\"_blank\" href=\"https://localhost:44398{Url.Action("UpdatePassword", "Security", new { Id = user.Id, token = HttpUtility.UrlEncode(token) })}\">Yeni şifre talebi için tıklayınız</a>";
                 mail.IsBodyHtml = true;
+
                 SmtpClient smp = new SmtpClient();
-                smp.Credentials = new NetworkCredential("ozkayaelif562@gmail.com", "ozkayaelif562");
+                smp.Credentials = new NetworkCredential(email, password);
                 smp.Port = 587;
-                smp.Host = "smtp.gmail.com";
+                smp.Host = host;
                 smp.EnableSsl = true;
                 smp.Send(mail);
 
@@ -117,6 +129,7 @@ namespace WebAPI.Controllers
 
             return View();
         }
+
 
         [HttpGet("[action]/{Id}/{token}")]
         public IActionResult UpdatePassword(string Id, string token)
