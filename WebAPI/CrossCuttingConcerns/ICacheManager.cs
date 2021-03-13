@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.CrossCuttingConcerns.Caching.Microsoft
+namespace WebAPI.CrossCuttingConcerns.Caching.Microsoft
 {
     public interface ICacheManager
     {

@@ -1,10 +1,7 @@
-using Business.Abstract;
 
-using Business.ConCrete;
 using Core.Extensions;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
-
 using Identity.CustomValidations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

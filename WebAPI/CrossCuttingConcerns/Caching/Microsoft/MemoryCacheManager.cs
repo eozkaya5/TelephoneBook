@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.CrossCuttingConcerns.Caching
+namespace WebAPI.CrossCuttingConcerns.Caching
 {
     public class MemoryCacheManager : ICacheManager
     {
