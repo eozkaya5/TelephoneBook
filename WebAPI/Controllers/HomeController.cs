@@ -17,7 +17,22 @@ namespace WebAPI.Controllers
         {
             _logger = logger;
         }
-
+   
+        public IActionResult Information()
+        {
+            _logger.LogInformation("Information mesajı...");
+            return View();
+        }
+        public IActionResult Error()
+        {
+            _logger.LogError("Error mesajı...");
+            return View();
+        }
+        public IActionResult Warning()
+        {
+            _logger.LogWarning("Warning mesajı...");
+            return View();
+        }
         public IActionResult Index()
         {
             ViewBag.UserName = User.Identity.Name;
@@ -25,15 +40,6 @@ namespace WebAPI.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+       
     }
 }

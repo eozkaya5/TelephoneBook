@@ -1,7 +1,4 @@
 
-using Core.Extensions;
-using Core.Utilities.IoC;
-using Core.Utilities.Security.Encryption;
 using Identity.CustomValidations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,14 +25,17 @@ namespace WebAPI
 {
     public class Startup
     {
+       
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
+      
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        //public Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment { get; set; }
+        //public Startup(Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnvironment) => _hostingEnvironment = hostingEnvironment;
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LoginDbContext>(_ => _.UseSqlServer(Configuration["ConnectionString"]));
@@ -71,9 +72,11 @@ namespace WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, )
         {
-            if (env.IsDevelopment())
+            //LoggerFactory.AddProvider(new LoggerProvider(_hostingEnvironment));
+            
+                if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
