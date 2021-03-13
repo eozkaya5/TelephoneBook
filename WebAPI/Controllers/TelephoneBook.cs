@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,22 @@ namespace WebAPI.Controllers
 {
     public class TelephoneBook : Controller
     {
+        const string cacheKey = "book";
         private readonly BookDbContext _context;
         private readonly UserManager<AppUser> _userManager;
-        public TelephoneBook(BookDbContext context, UserManager<AppUser> userManager)
+        private readonly IMemoryCache _memoryCache;
+
+        public TelephoneBook(BookDbContext context, UserManager<AppUser> userManager, MemoryCache memoryCache)
         {
             _context = context;
             _userManager = userManager;
+            _memoryCache = memoryCache;
         }
         public IActionResult Index(int id)
         {
             ViewBag.UserName = User.Identity.Name;
             var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
-            var book = _context.Books.Where(x => x.UserId == user.Id);  
+            var book = _context.Books.Where(x => x.UserId == user.Id);
             return View(book);
         }
 
@@ -37,7 +42,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
+                var user = _userManager.FindByNameAsync(User.Identity.Name).Result;                
                 book.UserId = user.Id;
                 _context.Books.Add(book);
                 _context.SaveChanges();
@@ -55,8 +60,8 @@ namespace WebAPI.Controllers
             {
                 var user = _userManager.FindByNameAsync(User.Identity.Name).Result;
                 var delete = _context.Books.FirstOrDefault(x => x.Id == id);
-                delete.UserId = user.Id;             
-                _context.Books.Remove(delete);
+                delete.UserId = user.Id;
+                _memoryCache.Remove(delete);
                 _context.SaveChanges();
             }
             catch (Exception)
@@ -83,7 +88,7 @@ namespace WebAPI.Controllers
                     model.Name = book.Name;
                     model.SurName = book.SurName;
                     model.TelephoneNumber = book.TelephoneNumber;
-                        
+
                     _context.SaveChanges();
                     return RedirectToAction("Index", new { id = model.UserId });
                 }
@@ -95,6 +100,7 @@ namespace WebAPI.Controllers
             }
             return View(book);
         }
-
     }
 }
+      
+     

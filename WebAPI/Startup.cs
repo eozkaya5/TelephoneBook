@@ -68,7 +68,7 @@ namespace WebAPI
                 _.SlidingExpiration = true;
                 _.ExpireTimeSpan = TimeSpan.FromMinutes(10);
             });
-
+            services.AddMemoryCache();
             services.AddControllersWithViews();
             services.AddSwaggerDocument();
         }
