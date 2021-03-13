@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -12,6 +13,7 @@ using WebAPI.Models.Context;
 
 namespace WebAPI.Controllers
 {
+	[Authorize]
 	public class TelephoneBook : Controller
 	{
 
