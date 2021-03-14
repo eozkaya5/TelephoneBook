@@ -1,83 +1,56 @@
-﻿
-@model IEnumerable<WebAPI.Models.Book>
+﻿@model DateTime?
+@{Layout = null; }
 
+<head>
 
+    <title>Hata Mesajı</title>
+    <!-- loader-->
+    <link href="~/assets/css/pace.min.css" rel="stylesheet" />
+    <script src="~/assets/js/pace.min.js"></script>
+    <link rel="icon" href="~/assets/images/favicon.ico" type="image/x-icon">
+    <!-- Bootstrap core CSS-->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- animate CSS-->
+    <link href="~/assets/css/animate.css" rel="stylesheet" type="text/css" />
+    <!-- Icons CSS-->
+    <link href="~/assets/css/icons.css" rel="stylesheet" type="text/css" />
+    <!-- Custom Style-->
+    <link href="~/assets/css/app-style.css" rel="stylesheet" />
 
-<input type="hidden" name="Id" value="@ViewBag.CustomerId" />
-
-<div class="content-wrapper">
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-body">
-                <h1>Yeni Kişi Ekle</h1>
-                <br />
-
-                <form asp-controller="Book" asp-action="Index" method="post">
-                    <input type="hidden" name="Id" />
-                    <div>
-                        <label>Adı:</label>
-                        <input type="text" name="Name" class="form-control" value="" required />
-                    </div>
-                    <div>
-                        <label>Soyadı:</label>
-                        <input type="text" name="SurName" class="form-control" value="" required />
-                    </div>
-                    <div>
-                        <label>Telefon Numarası:</label>
-                        <input type="text" name="NameSurname" class="form-control" value="" required />
-                    </div>
-                    <button type="submit">Ekle</button>
-                </form>
-                <br />
-                <form asp-controller="Book" asp-action="GetAll" method="post">
-
-                    <h3 class="card-title">Kişilerim</h3>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Kullanıcı Kodu</th>
-                                    <th>Adı </th>
-                                    <th>Soyadı</th>
-                                    <th>Telefon Numarası</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            @*<tbody>
-                                @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Id)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SurName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TelephoneNumber)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Sil</a> |
-                                   
-                                </td>
-                            </tr>
-
-                        }
-                            </tbody>*@
-
-                        </table>
-                    </div>
-                </form>
-            </div>
+</head>
+<p class="text-center mt-5 p-3 lead">
+    ÖNBELLEKTE KALMA SÜRESİ
+    </p>
+    <hr />
+    <hr />
+    <form asp-controller="Home" asp-action="Index" method="post">
+        <div class="row">
+            <span class="text-center mt-5 p-3 lead">
+               # Şimdiki Zaman:
+                @DateTime.Now.ToString();
+            </span>
         </div>
-    </div>
+        <div>
+            <span class="text-center mt-5 p-3 lead">
+                # Önbelleğe Alınan Zaman:
+                @Model.Value.ToString();
+            </span>
+        </div>
+    </form>
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
 
-</div><!--End Row-->
-<!--</form>-->
-<!--start overlay-->
-<!--<div class="overlay toggle-menu"></div>-->
-<!--end overlay-->
+<!--Start Back To Top Button-->
+
+
+<!--end color switcher-->
+<!-- Bootstrap core JavaScript-->
+<!--<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/assets/js/popper.min.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>-->
+
+<!-- sidebar-menu js -->
+<!--<script src="~/assets/js/sidebar-menu.js"></script>-->
+
+<!-- Custom scripts -->
+<!--<script src="~/assets/js/app-script.js"></script>-->
+
