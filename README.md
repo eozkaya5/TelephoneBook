@@ -1,3 +1,5 @@
+Telefon Rehberi
+
 Projenin çalışabilmesi için öncelikle veri tabanı ekliyoruz. Visual Studio programında ki menüden Tools > NuGet Package Maneger > Package Manager Console açıyoruz.
 
 Açılan sayfaya login için; "add-migration init -context LoginDbContext" ekliyoruz. (init ismini istediğiniz gibi değiştirebilirsiniz) " update-database -context LoginDbContext" güncelleyerek veri tabanını ekliyoruz.
