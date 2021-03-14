@@ -1,11 +1,14 @@
 
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LogLevel = NLog.LogLevel;
 
 namespace WebAPI.Controllers
 {
@@ -37,6 +40,14 @@ namespace WebAPI.Controllers
             }
 
             return View(time);
+        }
+        [Route("/Error")]
+        public IActionResult Error()
+        {
+            var error = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            var logger = LogManager.GetLogger("FileManager");
+            logger.Log(LogLevel.Error, $"\nHatanýn gerçekleþtiði yer:{error.Path} \nHata: {error.Error.Message}\nStackTrace:{ error.Error.StackTrace}");
+            return View();
         }
 
 
