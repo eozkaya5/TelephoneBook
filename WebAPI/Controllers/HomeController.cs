@@ -1,7 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+
 using Microsoft.Extensions.Logging;
 using NLog;
 using System;
@@ -24,22 +21,10 @@ namespace WebAPI.Controllers
            this.memoryCache = cache;
 
         }
-        //public IActionResult Information()
-        //{
-        //    _logger.LogInformation("Information mesajı...");
-        //    return View();
-        //}
-        //public IActionResult Error()
-        //{
-        //    _logger.LogError("Error mesajı...");
-        //    return View();
-        //}
-        //public IActionResult Warning()
-        //{
-        //    _logger.LogWarning("Warning mesajı...");
-        //    return View();
-        //}
+
+
        [Route("/Index")]
+
         public IActionResult Index()
         {
             ViewBag.UserName = User.Identity.Name;
@@ -56,14 +41,8 @@ namespace WebAPI.Controllers
                   
             return View(time);
         }
-        [Route("/Error")]
-        public IActionResult Error()
-        {
-            var error = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            var logger = LogManager.GetLogger("FileManager");
-            logger.Log(LogLevel.Error, $"\nHatanın gerçekleştiği yer:{error.Path} \nHata: {error.Error.Message}\nStackTrace:{ error.Error.StackTrace}");
-            return View();
-        }
+      
+
 
     }
 }
