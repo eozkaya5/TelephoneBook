@@ -22,7 +22,6 @@ namespace WebAPI.Controllers
         }
 
         [Route("/Index")]
-
         public IActionResult Index()
         {
             ViewBag.UserName = User.Identity.Name;

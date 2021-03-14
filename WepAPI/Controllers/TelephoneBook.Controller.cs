@@ -33,7 +33,6 @@ namespace WebAPI.Controllers
 			var book = _context.Books.Where(x => x.UserId == user.Id);
 			return View(book);
 		}
-
 		public IActionResult Create()
 		{
 			return View();
